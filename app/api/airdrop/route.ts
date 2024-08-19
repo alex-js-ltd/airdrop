@@ -9,14 +9,13 @@ import {
 import { invariantResponse } from "@/app/utils/misc";
 
 const SOLANA_CONNECTION = new Connection(clusterApiUrl("devnet"));
-const WALLET_ADDRESS = "2BRDBEqc2e6L5bePxVMMHa2eTsxjkmCNUKsHRYjM9dpV"; //👈 Replace with your wallet address
 const AIRDROP_AMOUNT = 5 * LAMPORTS_PER_SOL; // 1 SOL
 
-export async function GET(request: Request) {
-  console.log(`Requesting airdrop for ${WALLET_ADDRESS}`);
+export async function POST(request: Request) {
+  const { walletAddress } = await request.json();
 
   const signature = await SOLANA_CONNECTION.requestAirdrop(
-    new PublicKey(WALLET_ADDRESS),
+    new PublicKey(walletAddress),
     AIRDROP_AMOUNT
   );
   // 2 - Fetch the latest blockhash

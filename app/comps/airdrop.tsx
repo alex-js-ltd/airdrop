@@ -3,8 +3,16 @@
 import useSWR from "swr";
 import Link from "next/link";
 
+const walletAddress = "3SxXqLiTSwLsJvttqMEzgZrJryw5f23AabQB89TUcPAE"; //👈 Replace with your wallet address
+
 async function fetcher(): Promise<{ message: string }> {
-  const res = await fetch("/api/airdrop");
+  const res = await fetch("/api/airdrop", {
+    method: "POST", // Use POST method
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ walletAddress: walletAddress }), // Send the wallet address in the request body
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch airdrop");
