@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+
 import {
   Connection,
   LAMPORTS_PER_SOL,
@@ -11,11 +12,16 @@ import { invariantResponse } from "@/app/utils/misc";
 const SOLANA_CONNECTION = new Connection(clusterApiUrl("devnet"));
 const AIRDROP_AMOUNT = 5 * LAMPORTS_PER_SOL; // 1 SOL
 
-export async function POST(request: Request) {
-  const { walletAddress } = await request.json();
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const query = searchParams.get("query");
+
+  invariantResponse(query, "no wallet address", {
+    status: 500,
+  });
 
   const signature = await SOLANA_CONNECTION.requestAirdrop(
-    new PublicKey(walletAddress),
+    new PublicKey(query),
     AIRDROP_AMOUNT
   );
   // 2 - Fetch the latest blockhash
