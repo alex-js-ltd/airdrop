@@ -18,9 +18,13 @@ async function fetcher(): Promise<{ message: string }> {
 }
 
 export function Airdrop() {
-  const { data, error } = useSWR("/api/airdrop", fetcher, {
-    refreshInterval: 4200000, // Poll every hour and 10 minutes
-  });
+  const { data, error } = useSWR(
+    `/api/airdrop?query=${walletAddress}`,
+    fetcher,
+    {
+      refreshInterval: 4200000, // Poll every hour and 10 minutes
+    }
+  );
 
   console.log(data);
 
